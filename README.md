@@ -136,7 +136,7 @@ jupyter nbconvert --to script assignment_NC2425.ipynb
 ___
 13. Run the CNN Training Script
 ```bash
-jupyter nbconvert --to script assignment_NC2425.ipynb
+python assignment_NC2425.ipy
 ```
 ___
 14. Detach from the screen session (only during the setup session) 
