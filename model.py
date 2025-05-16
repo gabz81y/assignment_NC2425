@@ -152,22 +152,26 @@ class FoodCNN(nn.Module):
         """Plots training and testing accuracies after training, and saves plot."""
         if not os.path.exists('plots'):
             os.makedirs('plots')
-
+    
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = f"accuracy_plot_{timestamp}.png"
         save_path = os.path.join('plots', filename)
-
+    
+        epochs = len(train_accuracies)
+        x_values = np.linspace(1, 100, epochs)
+    
         plt.figure(figsize=(8, 6))
-        plt.plot(range(1, len(train_accuracies) + 1), train_accuracies, marker='o', label='Train Accuracy')
-        plt.plot(range(1, len(test_accuracies) + 1), test_accuracies, marker='x', label='Test Accuracy')
+        plt.plot(x_values, train_accuracies, marker='o', label='Train Accuracy')
+        plt.plot(x_values, test_accuracies, marker='x', label='Test Accuracy')
         plt.title("Accuracy vs Epochs")
         plt.xlabel("Epoch")
         plt.ylabel("Accuracy (%)")
+        plt.xticks(np.arange(0, 101, 10))  # Ticks at 0, 10, ..., 100
         plt.legend()
         plt.grid(True)
-
+    
         plt.savefig(save_path)
-
+    
         if self.plot_graph:
             plt.show()
 
