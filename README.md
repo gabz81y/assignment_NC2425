@@ -36,113 +36,171 @@ Setup Instructions (via LIACS SSH)
 
 ___
 
-1. Open WSL terminal.
+1. Open WSL Terminal
+
+Launch your terminal using Windows Subsystem for Linux (WSL).
 
 ___
 
-2. SSH into the LIACS login server:
+2. Connect to the LIACS Login Server
 
+SSH into the LIACS login node using your student credentials:
 ```bash
 ssh s[student_number]@ssh.liacs.nl
 ```
+On your first attempt, you'll be prompted to confirm the server’s authenticity. Type yes when asked to save the host key.
 
-
-(Enter your Brightspace/ULCN password when prompted)
-
-(During the first time, write 'yes' when asked to connect with a fingerprint.)
+Enter your Brightspace/ULCN password when prompted.
 
 ___
 
-3. SSH into the Internal Server
+3. SSH into the Internal Server (VIbranium)
 
+Once connected to the login node, SSH into the internal server:
 ```bash
 ssh vibranium
 ```
+If you receive a warning about a changed host key (potential MITM attack), clear the old key and reconnect:
 
-(Enter your Brightspace/ULCN password when prompted)
+```bash
+ssh-keygen -R vibranium
+ssh vibranium 
+```
+Accept the host key again if prompted and enter your password.
 
-(During the first time, write 'yes' when asked to connect with a fingerprint.)
 ___
-4. Start a screen session:  
 
-During the setup
+4. (Optional) Start a screen Session
+
+Using screen allows your training jobs to continue running even if your SSH session disconnects.
+
+To start a session for the first time:
 ```bash
 screen -S cnn_training
 ```
-During the next sessions to restore the screen
-During the setup
+To reconnect to a session later:
 ```bash
 screen -r cnn_training
 ```
-[TIP - use whenever in screen you want to reset the content in the screen]
+To clear the terminal content inside a screen session:
 ```bash
 clear
 ```
+
 ___
-5. Navigate to your home directory
+
+5. Navigate to Your Home Directory
 
 ```bash
 cd /home/s[student_number]/
 ```
 ___
-6. Check if the /data/s[student_number] directory exists
 
+6. Navigate to or Create the /data Directory
+
+First time only:
 ```bash
+mkdir /data/s[student_number]/
 cd /data/s[student_number]
 ```
 
-If it does not exist, create it:
-    
+Subsequent use:
 ```bash
-mkdir /data/s[student_number]
-cd /data/s[student_number]
+cd /data/s[student_number]/
 ```
+
 ___
-7. Clone the repository: 
+
+7. Clone or Access the assignment_NC2425 Repository
+
+During setup:
 ```bash
 git clone https://github.com/gabz81y/assignment_NC2425.git
 cd assignment_NC2425
 ```
+Later:
+```bash
+cd assignment_NC2425
+```
+
 ___
-8. Sync with Latest Changes:
+
+8. Sync with the Latest Changes:
+
+During setup:
 ```bash
 git pull origin main --rebase
 ```
+
+Later:
+```bash
+git pull 
+```
+
 ___
-9. Set Up a Python Virtual Environment
+
+9. Access the Python Virtual Environment
+
+During setup:
 ```bash
 python -m venv nc_venv
-source nc_venv/bin/activate
+source nc_venv/bin/activate  
 ```
+
+Later:
+```bash
+source nc_venv/bin/activate  
+```
+
 ___
-10. Install Dependencies
+
+10. Install Dependencies (only during setup)
 ```bash
 pip install -r requirements.txt
 ```
+
 ___
-11. Download and Prepare the Dataset
+
+11. Download and Prepare the Dataset (setup only)
 ```bash
 python get_data.py
 ```
-Verify that train and test directories have been created:
+
+Once complete, verify the dataset was extracted properly:
 ```bash
 ls
 ```
+You should see both /train and /test directories in the current folder.
+
 ___
-12. Convert Notebook to Script
+
+12. Convert the Notebook to a Python Script (setup only)
+
+Convert the Jupyter notebook to a .py script using:
 ```bash
 jupyter nbconvert --to script assignment_NC2425.ipynb
 ```
+This will generate assignment_NC2425.py in the same directory.
+
 ___
+
 13. Run the CNN Training Script
+
+To start model training, run:
 ```bash
-python assignment_NC2425.ipy
+python assignment_NC2425.py
 ```
+
 ___
-14. Detach from the screen session (only during the setup session) 
+
+14. Detach from the Screen Session (if using screen)
+
+If you're running inside a screen session and want to safely detach:
 ```bash
 Ctrl + A, then D
 ```
+This will keep the training running in the background, allowing you to reconnect later.
+
 ___
 
 
