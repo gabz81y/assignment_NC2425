@@ -48,9 +48,9 @@ SSH into the LIACS login node using your student credentials:
 ```bash
 ssh s[student_number]@ssh.liacs.nl
 ```
-On your first attempt, you'll be prompted to confirm the server’s authenticity. Type yes when asked to save the host key.
+On your first attempt, you'll be prompted to confirm the server’s authenticity. Type "yes" when asked to save the host key.
 
-Enter your Brightspace/ULCN password when prompted.
+Enter your **Brightspace/ULCN** password when prompted.
 
 ___
 
@@ -170,7 +170,7 @@ Once complete, verify the dataset was extracted properly:
 ```bash
 ls
 ```
-You should see both /train and /test directories in the current folder.
+You should see both "train" and "test" directories in the current folder.
 
 ___
 
