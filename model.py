@@ -21,13 +21,25 @@ import gc
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #device_type = "cuda" if torch.cuda.is_available() else "cpu"
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+SEED = 18
 torch.manual_seed(18)
 random.seed(18)
 np.random.seed(18)
 if torch.cuda.is_available():
     torch.cuda.manual_seed_all(18)
+    torch.manual_seed(18)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+def seed_worker(worker_id):
+    worker_seed = SEED + worker_id
+    np.random.seed(worker_seed)
+    random.seed(worker_seed)
+
+g = torch.Generator()
+g.manual_seed(SEED)
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # give training set more distortion to discourage overfitting
 train_transform = transforms.Compose([
@@ -62,8 +74,8 @@ test_dataset = datasets.ImageFolder(root="test", transform=test_transform)
 num_workers = min(14, os.cpu_count())  # auto-detect cpu core count, cap at 14 (lower this cap if system crashes)
 
 # Create DataLoaders
-train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=num_workers, pin_memory=True, persistent_workers=True)
-test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=num_workers, pin_memory=True, persistent_workers=True)
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True, num_workers=num_workers, pin_memory=True, persistent_workers=True, worker_init_fn=seed_worker, generator=g)
+test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=num_workers, pin_memory=True, persistent_workers=True, worker_init_fn=seed_worker, generator=g)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -126,7 +138,6 @@ class FoodCNN(nn.Module):
         self.plot_graph = plot_graph
         self.early_stopping = early_stopping # saves time is model stops improving
         self.patience = patience # threshold to stop training if accuracy doesnt improve enough accross epochs
-        
         self.eval_interval = eval_interval # gather test and train accuracy every n epochs for plotting
         
     def forward(self, X):
@@ -210,7 +221,6 @@ def _train_and_save_model(self):
 
         for X_train, y_train in tqdm(train_loader, desc=f"Epoch {e+1}"):
             X_train, y_train = X_train.to(device), y_train.to(device)
-
             optimizer.zero_grad()
 
             #with autocast(dtype=torch.float16):
