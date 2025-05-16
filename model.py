@@ -140,25 +140,25 @@ class FoodCNN(nn.Module):
     def plot_accuracies(self, train_accuracies, test_accuracies):
         """Plots training and testing accuracies after training, and saves plot."""
         if not os.path.exists('plots'):
-              os.makedirs('plots')
-          
-          timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-          filename = f"accuracy_plot_{timestamp}.png"
-          save_path = os.path.join('plots', filename)
-          
-          plt.figure(figsize=(8, 6))
-          plt.plot(range(1, len(train_accuracies) + 1), train_accuracies, marker='o', label='Train Accuracy')
-          plt.plot(range(1, len(test_accuracies) + 1), test_accuracies, marker='x', label='Test Accuracy')
-          plt.title("Accuracy vs Epochs")
-          plt.xlabel("Epoch")
-          plt.ylabel("Accuracy (%)")
-          plt.legend()
-          plt.grid(True)
-          
-          plt.savefig(save_path)
-          
-          if self.plot_graph:
-              plt.show()
+            os.makedirs('plots')
+
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        filename = f"accuracy_plot_{timestamp}.png"
+        save_path = os.path.join('plots', filename)
+
+        plt.figure(figsize=(8, 6))
+        plt.plot(range(1, len(train_accuracies) + 1), train_accuracies, marker='o', label='Train Accuracy')
+        plt.plot(range(1, len(test_accuracies) + 1), test_accuracies, marker='x', label='Test Accuracy')
+        plt.title("Accuracy vs Epochs")
+        plt.xlabel("Epoch")
+        plt.ylabel("Accuracy (%)")
+        plt.legend()
+        plt.grid(True)
+
+        plt.savefig(save_path)
+
+        if self.plot_graph:
+            plt.show()
 
 def calculate_test_accuracy(model, test_loader): 
     model.eval()  # set model to evaluation mode
