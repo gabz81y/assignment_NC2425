@@ -3,7 +3,7 @@ torchvision==0.14.1
 torchaudio==0.13.1
 matplotlib==3.5.3
 tqdm==4.66.1
-numpy==1.26.0
+numpy==1.21.6
 gdown==4.7.1
 
 
